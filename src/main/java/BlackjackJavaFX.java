@@ -10,14 +10,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class JavaFXTemplate extends Application {
+public class BlackjackJavaFX extends Application {
 
 	Label label_welcome, label_placeBet, label_placeMoney;
 	TextField text_bet, text_money;
-	ImageView img_token, img_money;
+	ImageView img_token, img_money, img_title;
 	Button btn_start, btn_saveBet, btn_saveMoney;
 	int money, bet;
 
@@ -38,6 +37,12 @@ public class JavaFXTemplate extends Application {
 		label_welcome.setStyle("-fx-text-fill: white;" + "-fx-font-size: 40;"
 				+ "-fx-font-family: Cambria");
 
+		// Start Scene: title image
+		Image title = new Image("Icon/title.png");
+		img_title = new ImageView(title);
+		img_title.setFitWidth(400);
+		img_title.setPreserveRatio(true);
+
 		// Start Scene: Place money label
 		label_placeMoney = new Label("Place your starting money:");
 		label_placeMoney.setStyle("-fx-text-fill: white;" + "-fx-font-size: 20;"
@@ -48,7 +53,7 @@ public class JavaFXTemplate extends Application {
 		text_money.setStyle("-fx-font-family: Cambria;" + "-fx-font-size: 20");
 
 		// Start Scene: Money image
-		Image dollar = new Image("dollar.png");
+		Image dollar = new Image("Icon/dollar.png");
 		img_money = new ImageView(dollar);
 		img_money.setFitHeight(50);
 		img_money.setFitWidth(50);
@@ -60,11 +65,15 @@ public class JavaFXTemplate extends Application {
 				+ "-fx-font-family: Cambria;" + "-fx-background-color: white;"
 				+ "-fx-border-color: black;");
 		btn_saveMoney.setOnAction(e->{
-
-			money = Integer.parseInt(text_money.getText());
-			text_money.setDisable(true);
-			text_money.setText("$" + text_money.getText());
-			btn_saveMoney.setDisable(true);
+			try {
+				money = Integer.parseInt(text_money.getText());
+				text_money.setDisable(true);
+				text_money.setText("$" + text_money.getText());
+				btn_saveMoney.setDisable(true);
+			}
+			catch (NumberFormatException badInput) {
+				text_money.setText("Invalid input.");
+			}
 
 			// Enable start button
 			if (btn_saveMoney.isDisable() && btn_saveBet.isDisable()) {
@@ -82,7 +91,7 @@ public class JavaFXTemplate extends Application {
 		text_bet.setStyle("-fx-font-family: Cambria;" + "-fx-font-size: 20");
 
 		// Start Scene: Token image
-		Image token = new Image("token.png");
+		Image token = new Image("Icon/token.png");
 		img_token = new ImageView(token);
 		img_token.setFitHeight(50);
 		img_token.setFitWidth(50);
@@ -94,11 +103,15 @@ public class JavaFXTemplate extends Application {
 				+ "-fx-font-family: Cambria;" + "-fx-background-color: white;"
 				+ "-fx-border-color: black;");
 		btn_saveBet.setOnAction(e->{
-
-			bet = Integer.parseInt(text_bet.getText());
-			text_bet.setDisable(true);
-			text_bet.setText("$" + text_bet.getText());
-			btn_saveBet.setDisable(true);
+			try {
+				bet = Integer.parseInt(text_bet.getText());
+				text_bet.setDisable(true);
+				text_bet.setText("$" + text_bet.getText());
+				btn_saveBet.setDisable(true);
+			}
+			catch (NumberFormatException badInput) {
+				text_bet.setText("Invalid input.");
+			}
 
 			// Enable start button
 			if (btn_saveMoney.isDisable() && btn_saveBet.isDisable()) {
@@ -144,16 +157,16 @@ public class JavaFXTemplate extends Application {
 		VBox paneCenter = new VBox(30);
 		paneCenter.getChildren().addAll(paneMoney, paneBet);
 
-		VBox paneVertical = new VBox(150);
+		VBox paneVertical = new VBox(100);
 		paneVertical.setAlignment(Pos.CENTER);
-		paneVertical.getChildren().addAll(label_welcome, paneCenter, btn_start);
+		paneVertical.getChildren().addAll(img_title, paneCenter, btn_start);
 
 		BorderPane pane = new BorderPane();
 		pane.setPadding(new Insets(70));
 		pane.setCenter(paneVertical);
 
 		// Background image
-		Image bgImage = new Image("startBG.png");
+		Image bgImage = new Image("Background/startBG.png");
 		BackgroundImage backgroundImage = new BackgroundImage(bgImage, null, null, null, null);
 		Background background = new Background(backgroundImage);
 		pane.setBackground(background);
@@ -167,7 +180,7 @@ public class JavaFXTemplate extends Application {
 		pane.setPadding(new Insets(70));
 
 		// Background image
-		Image bgImage = new Image("gameBG.jpg");
+		Image bgImage = new Image("Background/gameBG.jpg");
 		BackgroundImage backgroundImage = new BackgroundImage(bgImage, null, null, null, null);
 		Background background = new Background(backgroundImage);
 		pane.setBackground(background);
