@@ -17,11 +17,13 @@ import javafx.stage.Stage;
 public class BlackjackJavaFX extends Application {
 
 	Label label_welcome, label_placeBet, label_placeMoney,
-			label_money, label_bet, label_dealerTotal, label_playerTotal;
+			label_money, label_bet, label_dealerTotal, label_playerTotal,
+			label_stand, label_hit;
 	TextField text_bet, text_money;
 	ImageView img_token, img_money, img_title, img_stand, img_hit;
 	Button btn_start, btn_saveBet, btn_saveMoney, btn_stand, btn_hit;
 	int money, bet;
+	private BlackjackGame blackjackGame;
 
 
 	public static void main(String[] args) {
@@ -187,40 +189,38 @@ public class BlackjackJavaFX extends Application {
 				+ "-fx-font-style: italic;"
 				+ "-fx-background-color: #40826D");
 
-		/*
-		TODO ------------------------------------------------------------------------->
-		 After finish (img_stand) graphic design, fix code
-		 */
 		// Gameplay Scene: Stand image
-		Image stand = new Image("Icon/title.png"); // FIXME
+		Image stand = new Image("Icon/stand.png");
 		img_stand = new ImageView(stand);
-		img_stand.setFitHeight(50);
-		img_stand.setFitWidth(75);
+		img_stand.setFitWidth(100);
+		img_stand.setFitHeight(60);
 		img_stand.setPreserveRatio(true);
 
-		/*
-		TODO ------------------------------------------------------------------------->
-		 After finish (img_hit) graphic design, fix code
-		 */
-		// Gameplay Scene: Hit image
-		Image hit = new Image("Icon/title.png"); // FIXME
-		img_hit = new ImageView(hit);
-		img_hit.setFitHeight(50);
-		img_hit.setFitWidth(75);
-		img_hit.setPreserveRatio(true);
+		// Gameplay Scene: Stand label
+		label_stand = new Label("Stand");
+		label_stand.setStyle("-fx-font-family: Cambria;"
+				+ "-fx-font-size: 15;"
+				+ "-fx-text-fill: white;"
+				+ "-fx-font-weight: bold;");
 
-		/*
-		TODO ------------------------------------------------------------------------->
-		 Update (btn_stand) after fixing (img_stand)
-		 */
 		// Gameplay Scene: Stand button
 		btn_stand = new Button();
 		btn_stand.setGraphic(img_stand);
 
-		/*
-		TODO ------------------------------------------------------------------------->
-		 Update (btn_hit) after fixing (img_hit)
-		 */
+		// Gameplay Scene: Hit image
+		Image hit = new Image("Icon/hit.png");
+		img_hit = new ImageView(hit);
+		img_hit.setFitWidth(100);
+		img_hit.setFitHeight(60);
+		img_hit.setPreserveRatio(true);
+
+		// Gameplay Scene: Hit label
+		label_hit = new Label("Hit");
+		label_hit.setStyle("-fx-font-family: Cambria;"
+				+ "-fx-font-size: 15;"
+				+ "-fx-text-fill: white;"
+				+ "-fx-font-weight: bold;");
+
 		// Gameplay Scene: Hit button
 		btn_hit = new Button();
 		btn_hit.setGraphic(img_hit);
@@ -278,12 +278,47 @@ public class BlackjackJavaFX extends Application {
 	public Scene createGameplayScene() {
 
 		/*
-		TODO ------------------------------------------------------------------------->
+		TODO START HERE ------------------------------------------------------------------------->
 		 Start (blackjackGame) algorithm to start gameplay
 		 */
-		BlackjackGame blackjackGame = new BlackjackGame();
+
+		// Start game
+		blackjackGame = new BlackjackGame();
+		blackjackGame.startGame();
+		HBox rowDealerCards = new HBox(10);
+		rowDealerCards.setAlignment(Pos.CENTER);
+		HBox rowPlayerCards = new HBox(10);
+		rowPlayerCards.setAlignment(Pos.CENTER);
+
+		// Show dealer hand
+		for (Card card : blackjackGame.dealerHand()) {
+			String filename = "Card/" + card.suit + "/"
+					+ card.suit + "_" + card.value + ".png";
+			Image cardImage = new Image(filename);
+			ImageView img_card = new ImageView(cardImage);
+			img_card.setPreserveRatio(true);
+			img_card.setFitWidth(120);
+			img_card.setFitHeight(176);
+			rowDealerCards.getChildren().add(img_card);
+		}
+
+		// Show player hand
+		for (Card card : blackjackGame.playerHand()) {
+			String filename = "Card/" + card.suit + "/"
+					+ card.suit + "_" + card.value + ".png";
+			Image cardImage = new Image(filename);
+			ImageView img_card = new ImageView(cardImage);
+			img_card.setPreserveRatio(true);
+			img_card.setFitWidth(120);
+			img_card.setFitHeight(176);
+			rowPlayerCards.getChildren().add(img_card);
+		}
 
 
+		/*
+		TODO STOP HERE ------------------------------------------------------------------------->
+		 JavaFX Settings start here, DO NOT TOUCH
+		 */
 		label_money.setText("$" + String.valueOf(money));
 		label_bet.setText("$" + String.valueOf(bet));
 		label_dealerTotal.setText("Dealer hand: " + String.valueOf(30));
@@ -294,14 +329,16 @@ public class BlackjackJavaFX extends Application {
 		HBox rowCurrentBet = new HBox(10, img_token, label_bet);
 		rowCurrentBet.setAlignment(Pos.CENTER);
 
-		/*
-		TODO ------------------------------------------------------------------------->
-		 Call (btn_stand) and (btn_hit) and set respective HBox
-		 */
+		VBox colStand = new VBox(10, btn_stand, label_stand);
+		colStand.setAlignment(Pos.CENTER);
+		VBox colHit = new VBox(10, btn_hit, label_hit);
+		colHit.setAlignment(Pos.CENTER);
 
+		HBox rowStandHit = new HBox(70, colStand, colHit);
+		rowStandHit.setAlignment(Pos.CENTER);
 
-		VBox paneVertical = new VBox(30, rowFunds, label_dealerTotal,
-				label_playerTotal, rowCurrentBet);
+		VBox paneVertical = new VBox(30, rowFunds, label_dealerTotal, rowDealerCards,
+				rowPlayerCards, label_playerTotal, rowCurrentBet, rowStandHit);
 		paneVertical.setAlignment(Pos.CENTER);
 
 		BorderPane pane = new BorderPane();

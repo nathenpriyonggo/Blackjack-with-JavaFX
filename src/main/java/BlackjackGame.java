@@ -12,8 +12,6 @@ public class BlackjackGame {
     // Default constructor
     public BlackjackGame() {
 
-        playerHand = new ArrayList<>();
-        bankerHand = new ArrayList<>();
         theDealer = new BlackjackDealer();
         gameLogic = new BlackjackGameLogic();
         currentBet = 0.0;
@@ -43,5 +41,14 @@ public class BlackjackGame {
         else {
             return 0.0;
         }
+    }
+
+    public int playerHandTotal() {return gameLogic.handTotal(playerHand);}
+    public int dealerHandTotal() {return gameLogic.handTotal(bankerHand);}
+    public ArrayList<Card> playerHand() {return playerHand;};
+    public ArrayList<Card> dealerHand() {return bankerHand;};
+    public void startGame() {
+        playerHand = theDealer.dealHand();
+        bankerHand = theDealer.dealHand();
     }
 }
