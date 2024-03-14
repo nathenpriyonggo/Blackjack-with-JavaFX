@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class BlackjackGame {
+public class    BlackjackGame {
 
     ArrayList<Card> playerHand;
     ArrayList<Card> bankerHand;
@@ -43,6 +43,11 @@ public class BlackjackGame {
         }
     }
 
+    /*
+    User-defined functions
+     */
+
+    // Returns an int that contains the total in the player's hand
     public int playerHandTotal() {return gameLogic.handTotal(playerHand);}
     public int dealerFirstCardTotal() {return dealerHand().get(0).getValue();}
     public int dealerHandTotal() {return gameLogic.handTotal(bankerHand);}

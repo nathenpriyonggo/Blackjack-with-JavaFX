@@ -1,5 +1,6 @@
 import Exceptions.BetExceedsFundsException;
 import Exceptions.InsufficientFundsException;
+import Exceptions.NegativeFundsException;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -83,6 +84,9 @@ public class BlackjackJavaFX extends Application {
 		btn_saveMoney.setOnAction(e->{
 			try {
 				money = Integer.parseInt(text_money.getText());
+				if (money <= 0) {
+					throw new NegativeFundsException();
+				}
 				text_money.setDisable(true);
 				text_money.setText("$" + text_money.getText());
 				btn_saveMoney.setDisable(true);
@@ -91,7 +95,10 @@ public class BlackjackJavaFX extends Application {
 			catch (NumberFormatException badInput) {
 				text_money.setText("Invalid input.");
 			}
-
+			// If negative or zero funds, return error
+			catch (NegativeFundsException negativeInput) {
+				text_money.setText("Negative input.");
+			}
 			// Enable start button
 			if (btn_saveMoney.isDisable() && btn_saveBet.isDisable()) {
 				btn_start.setDisable(false);
@@ -132,6 +139,9 @@ public class BlackjackJavaFX extends Application {
 				else if (bet > money) {
 					throw new BetExceedsFundsException();
 				}
+				else if (bet <= 0) {
+					throw new NegativeFundsException();
+				}
 				text_bet.setDisable(true);
 				text_bet.setText("$" + text_bet.getText());
 				btn_saveBet.setDisable(true);
@@ -141,11 +151,17 @@ public class BlackjackJavaFX extends Application {
 			catch (NumberFormatException badInput) {
 				text_bet.setText("Invalid input.");
 			}
+			// If money is 0, return error
 			catch (InsufficientFundsException insufficientFundInput) {
                 text_bet.setText("No funds available.");
             }
+			// If bet is more than money, return error
 			catch (BetExceedsFundsException betExceedsFundsInput) {
 				text_bet.setText("Bet exceeds funds.");
+			}
+			// If negative or zero bet, return error
+			catch (NegativeFundsException negativeInput) {
+				text_bet.setText("Negative input.");
 			}
 
             // Enable start button
@@ -210,7 +226,7 @@ public class BlackjackJavaFX extends Application {
 				+ "-fx-font-size: 15;"
 				+ "-fx-text-fill: white;"
 				+ "-fx-font-weight: bold;");
-// ------------------------------------------------------------------------------------------>>
+
 		// Gameplay Scene: Stand button
 		btn_stand = new Button();
 		btn_stand.setGraphic(img_stand);
@@ -229,7 +245,7 @@ public class BlackjackJavaFX extends Application {
 				pause.play();
 			}
 		});
-// ------------------------------------------------------------------------------------------>>
+
 		// Gameplay Scene: Hit image
 		Image hit = new Image("Icon/hit.png");
 		img_hit = new ImageView(hit);
@@ -237,14 +253,13 @@ public class BlackjackJavaFX extends Application {
 		img_hit.setFitHeight(60);
 		img_hit.setPreserveRatio(true);
 
-
 		// Gameplay Scene: Hit label
 		label_hit = new Label("Hit");
 		label_hit.setStyle("-fx-font-family: Cambria;"
 				+ "-fx-font-size: 15;"
 				+ "-fx-text-fill: white;"
 				+ "-fx-font-weight: bold;");
-// ------------------------------------------------------------------------------------------>>
+
 		// Gameplay Scene: Hit button
 		btn_hit = new Button();
 		btn_hit.setGraphic(img_hit);
@@ -275,7 +290,7 @@ public class BlackjackJavaFX extends Application {
 				}
 			}
 		});
-// ------------------------------------------------------------------------------------------>>
+
 		// Gameplay Scene: Back card image
 		Image backCard = new Image("Card/card_back.png");
 		img_backCard = new ImageView(backCard);
@@ -319,7 +334,9 @@ public class BlackjackJavaFX extends Application {
 	}
 
 
-	// FIXME: Fully functional but not commented, modify if possible!
+	/*
+	Start scene code
+	 */
 	public Scene createStartScene() {
 
 		// Restart settings
@@ -484,7 +501,9 @@ public class BlackjackJavaFX extends Application {
 		}
 	}
 
-	// FIXME: Gameplay Scene in working progress...
+	/*
+	Gameplay scene code
+	 */
 	public Scene createGameplayScene() {
 
 		// Start game
@@ -552,6 +571,9 @@ public class BlackjackJavaFX extends Application {
 		return new Scene(pane, 800, 960);
 	}
 
+	/*
+	Play again scene code
+	 */
 	public Scene createPlayAgainScene() {
 
 		text_bet.setDisable(false);
