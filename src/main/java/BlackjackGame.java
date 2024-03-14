@@ -44,11 +44,30 @@ public class BlackjackGame {
     }
 
     public int playerHandTotal() {return gameLogic.handTotal(playerHand);}
+    public int dealerFirstCardTotal() {return dealerHand().get(0).getValue();}
     public int dealerHandTotal() {return gameLogic.handTotal(bankerHand);}
     public ArrayList<Card> playerHand() {return playerHand;};
     public ArrayList<Card> dealerHand() {return bankerHand;};
     public void startGame() {
         playerHand = theDealer.dealHand();
         bankerHand = theDealer.dealHand();
+    }
+    public void setBet(int newBet) {currentBet = newBet;};
+    public Card hit() {
+        Card hitCard = theDealer.drawOne();
+        playerHand.add(hitCard);
+        return hitCard;
+    };
+    public void dealerHit() {
+        bankerHand.add(theDealer.drawOne());
+    }
+    public boolean evalBankerDraw() {return gameLogic.evaluateBankerDraw(bankerHand);}
+    public boolean playerBusted() {return gameLogic.handTotal(playerHand) > 21;};
+    public String whoWonWithArgs() {return gameLogic.whoWon(playerHand, bankerHand);};
+    public boolean isBlackjack(ArrayList<Card> hand) {
+        if (hand.get(0).getValue() == 1 && hand.get(1).getValue() == 10) {
+            return true;
+        }
+        else return hand.get(0).getValue() == 10 && hand.get(1).getValue() == 1;
     }
 }
