@@ -67,4 +67,8 @@ public class BlackjackDealer {
     After a call to shuffleDeck(), this should be 52.
      */
     public int deckSize() {return deck.size();}
+
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
 }
