@@ -11,4 +11,31 @@ class BlackjackTestCase {
 		assertEquals(0.0, blackjackGame.totalWinnings);
 	}
 
+	@Test
+	void testPlayerHandTotal() {
+		BlackjackGame blackjackGame = new BlackjackGame();
+		blackjackGame.startGame();
+		assertTrue(blackjackGame.playerHandTotal() > 0);
+	}
+
+	@Test
+	void testDealerFirstCardTotal() {
+		BlackjackGame blackjackGame = new BlackjackGame();
+		blackjackGame.startGame();
+		assertTrue(blackjackGame.dealerFirstCardTotal() > 0);
+	}
+
+	@Test
+	void testPlayerBusted() {
+		BlackjackGame blackjackGame = new BlackjackGame();
+		blackjackGame.startGame();
+
+		assertFalse(blackjackGame.playerBusted());
+		while(blackjackGame.playerHandTotal() <= 21) {
+			blackjackGame.hit();
+		}
+
+		assertTrue(blackjackGame.playerBusted());
+	}
+
 }
